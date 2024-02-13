@@ -50,6 +50,9 @@ pub use request::*;
 mod response;
 pub use response::*;
 
+mod http;
+pub use http::*;
+
 //---------------------------------------------------------------------------------------------------- TESTS
 #[cfg(test)]
 mod tests {
