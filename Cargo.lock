@@ -1127,6 +1127,7 @@ dependencies = [
  "http 1.0.0",
  "http-body 1.0.0",
  "httparse",
+ "httpdate",
  "itoa",
  "pin-project-lite",
  "tokio",
@@ -1274,6 +1275,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "406cda4b368d531c842222cf9d2600a9a4acce8d29423695379c6868a143a9ee"
 dependencies = [
  "wasm-bindgen",
+]
+
+[[package]]
+name = "json-rpc"
+version = "0.1.2"
+dependencies = [
+ "futures",
+ "http-body-util",
+ "hyper 1.1.0",
+ "hyper-util",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "tower",
 ]
 
 [[package]]
