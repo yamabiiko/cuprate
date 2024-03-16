@@ -86,7 +86,7 @@ where
     }
 
     async fn send_message_to_peer(&mut self, mes: Message) -> Result<(), PeerError> {
-        Ok(self.peer_sink.send(mes).await?)
+        Ok(self.peer_sink.send(mes.into()).await?)
     }
 
     async fn handle_client_request(&mut self, req: ConnectionTaskRequest) -> Result<(), PeerError> {
@@ -161,7 +161,7 @@ where
         tracing::debug!("waiting for peer/client request.");
         tokio::select! {
             biased;
-            bradcast_req = self.broadcast_rx.next() => {
+            broadcast_req = self.broadcast_rx.next() => {
                 todo!()
             }
             client_req = self.client_rx.next() => {
@@ -188,7 +188,7 @@ where
         tracing::debug!("waiting for peer response..");
         tokio::select! {
             biased;
-            bradcast_req = self.broadcast_rx.next() => {
+            broadcast_req = self.broadcast_rx.next() => {
                 todo!()
             }
             peer_message = stream.next() => {

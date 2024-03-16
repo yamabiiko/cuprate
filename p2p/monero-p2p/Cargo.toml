@@ -11,7 +11,7 @@ borsh = ["dep:borsh", "monero-pruning/borsh"]
 
 [dependencies]
 cuprate-helper = { path = "../../helper" }
-monero-wire = { path = "../../net/monero-wire" }
+monero-wire = { path = "../../net/monero-wire", features = ["tracing"] }
 monero-pruning = { path = "../../pruning" }
 
 tokio = { workspace = true, features = ["net", "sync", "macros", "time"]}
@@ -29,6 +29,6 @@ borsh = { workspace = true, default-features = false, features = ["derive", "std
 [dev-dependencies]
 cuprate-test-utils = {path = "../../test-utils"}
 
-hex = { workspace = true }
+hex = { workspace = true, features = ["std"] }
 tokio = { workspace = true, features = ["net", "rt-multi-thread", "rt", "macros"]}
 tracing-subscriber = { workspace = true }

@@ -36,13 +36,24 @@
 //---------------------------------------------------------------------------------------------------- Public API
 #[cfg(feature = "asynch")]
 pub mod asynch; // async collides
+
 #[cfg(feature = "atomic")]
 pub mod atomic;
+
+#[cfg(feature = "constants")]
+pub mod constants;
+
+#[cfg(feature = "fs")]
+pub mod fs;
+
 pub mod network;
+
 #[cfg(feature = "num")]
 pub mod num;
+
 #[cfg(feature = "thread")]
 pub mod thread;
+
 #[cfg(feature = "time")]
 pub mod time;
 
