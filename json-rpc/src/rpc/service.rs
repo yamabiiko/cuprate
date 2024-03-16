@@ -7,24 +7,41 @@ use std::pin::Pin;
 use crate::error::ErrorObject;
 use futures::FutureExt;
 use std::task::Poll;
-use std::sync::Arc;
-use std::borrow::Cow;
-use serde::{Serialize,Deserialize};
 use serde_json::value::RawValue;
-use crate::method::{Method, Rpc};
+use tokio::time::{sleep, Duration};
+use std::time::Instant;
 
-macro_rules! call_with_params {
+macro_rules! call_method {
 
-	($method:expr, $request:expr, $fn:expr, $param:ty) => {{
+    // first case if the method needs params
+    ($method:expr, $request:expr, $fn:expr, $param:ty) => {{
         let id = $request.id.map(|id| id.into_owned());
 
         let Some(Ok(param)) = $request.params
             .map(|params| serde_json::from_str::<$param>(params.get())) else {
-			    return async move { Ok(Response::invalid_params(id)) }.boxed()
-		};
+            return async move { Ok(Response::invalid_params(id)) }.boxed()
+        };
 
-		$fn(param, id).boxed()
-	}};
+        async move {
+            let start_time = Instant::now();
+            let result = $fn(param, id).await;
+            let end_time = Instant::now();
+            tracing::info!("Elapsed time for RPC method {:?} was {:?}", $method, end_time - start_time);
+            result
+        }.boxed()
+    }};
+
+    ($method:expr, $request:expr, $fn:expr) => {{
+        let id = $request.id.map(|id| id.into_owned());
+
+        async move {
+            let start_time = Instant::now();
+            let result = $fn(id).await;
+            let end_time = Instant::now();
+            tracing::info!("Elapsed time for RPC method {:?} was {:?}", $method, end_time - start_time);
+            result
+        }.boxed()
+    }};
 }
 
 #[derive(Default, Clone)]
@@ -41,25 +58,25 @@ impl<'a> Service<Request<'a, &RawValue, &RawValue>> for RpcService
     }
 
     fn call(&mut self, req: Request<'a, &RawValue, &RawValue>) -> Self::Future {
-        println!("{}", req.method);
         let Ok(method) = serde_json::from_str::<crate::method::Method>(&req.method.get()) else {
-            return async move { Ok(Response::error(ErrorObject::invalid_request(), Some(Id::Num(1239)))) }.boxed();
+            let id = req.id.map(|id| id.into_owned());
+            return async move { Ok(Response::error(ErrorObject::invalid_request(), id )) }.boxed();
         };
 
 	    use crate::method::Method::*;
 
         match method {
-            TestMethod => {
-               call_with_params!(method, req, test, crate::param::TestMethod)
-            },
-            SecondMethod => async move {
-                Ok(Response::error(ErrorObject::invalid_request(), Some(Id::Num(404))))
-            }.boxed(),
+            TestMethod => call_method!(method, req, test, crate::param::TestMethod),
+            GetBlockCount => call_method!(method, req, get_block_count),
         }
     }
 }
 
 async fn test(param: crate::param::TestMethod, id: std::option::Option<Id<'_>>) -> Result<Response<&'static RawValue>, Box<dyn std::error::Error + Send + Sync + 'static>> {
-    Ok(Response::error(ErrorObject::invalid_request(), Some(Id::Num(202))))
+    sleep(Duration::from_secs(2)).await;
+    Ok(Response::error(ErrorObject::invalid_request(), id))
 }
 
+async fn get_block_count(id: std::option::Option<Id<'_>>) -> Result<Response<&'static RawValue>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    Ok(Response::error(ErrorObject::invalid_request(), id))
+}
