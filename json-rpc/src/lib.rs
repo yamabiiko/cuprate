@@ -2,7 +2,7 @@
 
 //---------------------------------------------------------------------------------------------------- Lints
 #![allow(clippy::len_zero, clippy::type_complexity, clippy::module_inception)]
-#![deny(unused_unsafe, unused_mut, deprecated)]
+#![deny(nonstandard_style, unused_unsafe, unused_mut, deprecated)]
 #![forbid(
 	future_incompatible,
 	break_with_label_and_loop,
@@ -49,12 +49,6 @@ pub use request::*;
 
 mod response;
 pub use response::*;
-
-mod server;
-pub use server::*;
-
-mod rpc;
-pub use rpc::*;
 
 //---------------------------------------------------------------------------------------------------- TESTS
 #[cfg(test)]

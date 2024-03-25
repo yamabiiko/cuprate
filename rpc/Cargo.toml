@@ -1,0 +1,23 @@
+[package]
+name = "cuprate-rpc"
+version = "0.1.0"
+edition = "2021"
+authors = ["yamabiiko"]
+description = "Cuprate's RPC server"
+license = "MIT"
+keywords = ["cuprate", "rpc"]
+
+[dependencies]
+
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+tokio = { workspace = true, features = ["rt"] }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+tower = { workspace = true }
+futures = { workspace = true }
+http-body-util = { version = "0.1.0" }
+hyper = { version = "1.1.0" , features = ["server", "http1"] }
+hyper-util = { version = "0.1.3", features = ["tokio"] }
+json-rpc = { path = "../json-rpc" }
+epee-encoding = { path = "../net/epee-encoding" }

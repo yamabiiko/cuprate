@@ -615,6 +615,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "cuprate-rpc"
+version = "0.1.0"
+dependencies = [
+ "epee-encoding",
+ "futures",
+ "http-body-util",
+ "hyper 1.2.0",
+ "hyper-util",
+ "json-rpc",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tower",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "cuprate-test-utils"
 version = "0.1.0"
 dependencies = [
@@ -1405,17 +1423,9 @@ dependencies = [
 name = "json-rpc"
 version = "0.1.2"
 dependencies = [
- "futures",
- "http-body-util",
- "hyper 1.1.0",
- "hyper-util",
  "serde",
  "serde_json",
  "thiserror",
- "tokio",
- "tower",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
