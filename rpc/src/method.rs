@@ -16,7 +16,7 @@ pub enum Rpc {
 }
 
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 struct BaseResponse {
     credits: u64,
     status: String,
@@ -39,12 +39,13 @@ pub enum Response {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TestResponse {
-    //base: BaseResponse,
+    base: BaseResponse,
     pub test: u8
 }
 
 epee_object!(
     TestResponse,
+    base: BaseResponse,
     test: u8,
 );
 

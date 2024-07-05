@@ -18,7 +18,6 @@ use crate::method::*;
 
 macro_rules! call_json_rpc {
 
-    // first case if the method needs params
     ($method:ident, $request:expr, $self:expr, $param:ty) => {{
         let id = $request.id.map(|id| id.into_owned());
 
@@ -110,7 +109,7 @@ impl<'a> Service<Rpc> for CoreRpc
 }
 
 pub struct CoreRpcRequest<T> {
-    pub method: Box<String>,
+    pub method: Cow<'static, str>,
     pub params: T
 }
 
